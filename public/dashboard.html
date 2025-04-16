@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKIGAI - Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #002B45;
+            --secondary-color: #4682B4;
+            --accent-color: #87CEFA;
+            --text-color: #333;
+            --light-text: #fff;
+            --gray-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--gray-bg);
+            color: var(--text-color);
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .logo,
+        .subtitle {
+            text-align: center;
+            margin-left: 0;
+            /* Quita el margen lateral */
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background-color: var(--secondary-color);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 20px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .main-title {
+            font-size: 28px;
+            margin: 0;
+            padding-left: 10;
+            margin-left: 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Welcome banner */
+        .welcome-banner {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-banner h1 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .welcome-banner p {
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        /* Calendar */
+        .calendar-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            color: var(--secondary-color);
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--accent-color);
+            color: var(--light-text);
+        }
+
+        .calendar-day.today {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            font-weight: bold;
+        }
+
+        .calendar-day.empty {
+            visibility: hidden;
+        }
+
+        /* Habits list */
+        .habits-summary {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .habit-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .habit-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .habit-category {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .habit-category.salud {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .habit-category.aprendizaje {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .habit-category.productividad {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .habit-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+        }
+
+        .habit-category.relaciones {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <div class="sidebar">
+            <img src="logo1.png" alt="Logo IKIGAI" class="sidebar-logo">
+            <div class="logo">IKIGAI</div>
+            <p class="subtitle">Encuentra tu propósito</p>
+            <nav>
+                <a href="dashboard.html" class="active">📅 Inicio</a>
+                <a href="habits.html">✅ Hábitos</a>
+                <a href="#">⏰ Recordatorio</a>
+                <a href="#">📊 Estadísticas</a>
+                <a href="#">⚙️ Ajustes</a>
+            </nav>
+        </div>
+
+
+        <div class="main-content">
+            <header>
+                <h1 style="margin-left: 40px;">Bienvenido a IKIGAI</h1>
+                <button id="create-habit-btn" onclick="location.href='create-habit.html'">+ Nuevo Hábito</button>
+            </header>
+
+
+            <div class="welcome-banner">
+                <h1>¡Hola, <span id="user-name">Usuario</span>!</h1>
+                <p>Comienza tu día con propósito. Revisa tus hábitos y progresa hacia tu mejor versión.</p>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button id="prev-month">◀</button>
+                    <h2 id="current-month">Abril 2024</h2>
+                    <button id="next-month">▶</button>
+                </div>
+                <div class="calendar-grid" id="calendar">
+                    <!-- Días del mes se generan con JavaScript -->
+                </div>
+            </div>
+
+            <div class="habits-summary">
+                <h3>Mis Hábitos Activos</h3>
+                <div id="habits-container">
+                    <!-- Mensaje cuando no hay hábitos (oculto inicialmente) -->
+                    <div id="no-habits-message" style="display: none; text-align: center; padding: 20px;">
+                        <p>No tienes hábitos registrados aún.</p>
+                        <button onclick="location.href='create-habit.html'" style="margin-top: 10px;">
+                            Crear mi primer hábito
+                        </button>
+                    </div>
+
+                    <!-- Lista de hábitos (vacía inicialmente) -->
+                    <div id="habits-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/api/habits", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+                const habitsContainer = document.getElementById("habits-list");
+                const noHabitsMessage = document.getElementById("no-habits-message");
+
+                // Limpiar contenedor
+                habitsContainer.innerHTML = "";
+                noHabitsMessage.style.display = "none";
+
+                // Verificar si hay habitos
+                if (result.data && result.data.length > 0) {
+                    result.data.forEach(habit => {
+                        const habitCard = document.createElement("div");
+                        habitCard.className = "habit-card";
+                        habitCard.innerHTML = `
+                            <h4>${habit.name}</h4>
+                            ${habit.description ? `<p>${habit.description}</p>` : ''}
+                            <div class="habit-details">
+                                <span class="category-badge ${habit.category}">${formatCategory(habit.category)}</span>
+                                <span><strong>Frecuencia:</strong> ${formatFrequency(habit.frequency)}</span>
+                                <span><strong>Inicio:</strong> ${formatDate(habit.start_date)}</span>
+                                <span class="streak"><strong>Racha:</strong> ${habit.streak || 0} días</span>
+                            </div>
+                            <div class="progress-container">
+                                <progress value="${habit.completionRate || 0}" max="100"></progress>
+                            </div>
+                        `;
+                        habitsContainer.appendChild(habitCard);
+                    });
+                } else {
+                    noHabitsMessage.style.display = "block";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("no-habits-message").style.display = "block";
+            }
+        });
+
+        // Funciones auxiliares
+        function formatCategory(category) {
+            const categories = {
+                salud: "Salud",
+                aprendizaje: "Aprendizaje",
+                productividad: "Productividad",
+                relaciones: "Relaciones"
+            };
+            return categories[category] || category;
+        }
+
+        function formatFrequency(frequency) {
+            return {
+                diario: "Diario",
+                semanal: "Semanal",
+                mensual: "Mensual"
+            }[frequency] || frequency;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES');
+        }
+    </script>
+
+
+
+    <script>
+        // Verificar autenticación
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+            } else {
+                // Obtener información del usuario si está autenticado
+                const userData = JSON.parse(localStorage.getItem('user'));
+                if (userData && userData.name) {
+                    document.getElementById('user-name').textContent = userData.name;
+                }
+            }
+        }
+
+        // Calendario
+        let currentDate = new Date();
+
+        function initCalendar() {
+            renderCalendar(currentDate);
+            setupEventListeners();
+        }
+
+        function renderCalendar(date) {
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+            document.getElementById('current-month').textContent =
+                `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+            const calendarGrid = document.getElementById('calendar');
+            calendarGrid.innerHTML = '';
+
+            const weekdays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            weekdays.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-weekday';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyElement = document.createElement('div');
+                emptyElement.className = 'calendar-day empty';
+                calendarGrid.appendChild(emptyElement);
+            }
+
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+
+                const today = new Date();
+                if (date.getMonth() === today.getMonth() &&
+                    date.getFullYear() === today.getFullYear() &&
+                    day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
+
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
+        }
+
+        // Cargar habitos
+        async function loadHabits() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:3000/api/habits', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Error al cargar hábitos');
+
+                const { habits } = await response.json();
+
+                if (habits && habits.length > 0) {
+                    document.getElementById('no-habits').style.display = 'none';
+                    renderHabits(habits);
+                } else {
+                    document.getElementById('no-habits').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('no-habits').style.display = 'block';
+            }
+        }
+
+        function renderHabits(habits) {
+            const container = document.getElementById('habits-list');
+            container.innerHTML = '';
+
+            habits.forEach(habit => {
+                const habitEl = document.createElement('div');
+                habitEl.className = 'habit-item';
+                habitEl.innerHTML = `
+                    <div class="habit-info">
+                        <h4>${habit.name}</h4>
+                        <p>${habit.description || 'Sin descripción'}</p>
+                        <span class="habit-category ${habit.category}">${getCategoryName(habit.category)}</span>
+                    </div>
+                    <div class="habit-progress">
+                        <div class="streak">Racha: ${habit.streak || 0} días</div>
+                        <progress value="${habit.completionRate || 0}" max="100"></progress>
+                    </div>
+                `;
+                container.appendChild(habitEl);
+            });
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                salud: 'Salud',
+                aprendizaje: 'Aprendizaje',
+                productividad: 'Productividad',
+                relaciones: 'Relaciones'
+            };
+            return names[category] || category;
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            initCalendar();
+            loadHabits();
+        });
+    </script>
+</body>
+
+</html>
