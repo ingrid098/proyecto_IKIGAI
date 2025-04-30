@@ -236,6 +236,11 @@
         .btn-delete {
             background-color: #f8d7da;
             color: #721c24;
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: #f5c6cb;
         }
 
         /* Modal */
@@ -314,12 +319,11 @@
             <nav>
                 <a href="dashboard.html">📅 Inicio</a>
                 <a href="habits.html" class="active">✅ Hábitos</a>
-                <a href="#">⏰ Recordatorio</a>
-                <a href="#">📊 Estadísticas</a>
-                <a href="#">⚙️ Ajustes</a>
+                <a href="recommendations.html" class="active">💡 Recomendaciones</a>
+                <a href="stats.html">📊 Estadísticas</a>
+                <a href="settings.html" class="active">⚙️ Ajustes</a>
             </nav>
         </div>
-
 
         <div class="main-content">
             <div class="habits-container">
@@ -489,6 +493,9 @@
                             <button class="btn btn-log" onclick="openProgressModal('${habit._id}')">
                                 Registrar
                             </button>
+                            <button class="btn btn-delete" onclick="confirmDelete('${habit._id}')">
+                                 Elimina    
+                            </button>
                         </div>
                     </div>
                     
@@ -515,11 +522,60 @@
             `).join('');
         }
 
+        async function confirmDelete(habitId) {
+            if (confirm('¿Estás seguro de que deseas eliminar este hábito?')) {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`http://localhost:3000/api/habits/${habitId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Eliminar el elemento
+                        document.getElementById(`habit-${habitId}`).remove();
+
+                        // Mostrar mensaje de éxito
+                        alert('Hábito eliminado exitosamente');
+
+                        // Si no quedan hábitos, mostrar mensaje
+                        if (document.querySelectorAll('.habit-card').length === 0) {
+                            document.getElementById('habits-list').innerHTML = `
+                            <div class="habit-card">
+                                <p>No tienes hábitos registrados aún.</p>
+                                <button class="btn btn-log" onclick="location.href='create-habit.html'">
+                                     Crear mi primer hábito
+                                </button>
+                                </div>
+                            `;
+
+                        }
+
+                    } else {
+
+                        const data = await response.json();
+                        alert(data.message || 'Error al eliminar el hábito');
+
+                    }
+
+                } catch (error) {
+
+                    console.error('Error:', error);
+
+                    alert('Error de conexión');
+
+                }
+
+            }
+
+        }
+
 
         function openEditModal(habitId) {
             const habit = document.getElementById(`habit-${habitId}`);
             const modal = document.getElementById('edit-modal');
-
 
             document.getElementById('edit-habit-id').value = habitId;
             document.getElementById('edit-name').value = habit.querySelector('.habit-title').textContent;

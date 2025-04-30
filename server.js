@@ -2,10 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import authRoutes from './routes/authRoutes.js';
 import habitRoutes from './routes/habitRoutes.js';
+import statsRoutes from './routes/statsRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
+import recommendationsRoutes from './routes/recommendationsRoutes.js';
 import { config } from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 
 config(); // Carga las variables de entorno
 
@@ -14,6 +16,7 @@ const app = express();
 // Configuración para ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 // Middleware
 app.use(express.json());
@@ -26,6 +29,10 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ikigai_db
 // Rutas API
 app.use('/api/auth', authRoutes);
 app.use('/api/habits', habitRoutes);
+app.use('/api/stats', statsRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/recommendations', recommendationsRoutes);
+
 
 // Ruta principal - 
 // frontend

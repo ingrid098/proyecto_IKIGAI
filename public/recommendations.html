@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKIGAI - Recomendaciones</title>
+    <style>
+        :root {
+            --primary-color: #002B45;
+            --secondary-color: #4682B4;
+            --accent-color: #87CEFA;
+            --text-color: #333;
+            --light-text: #fff;
+            --gray-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--gray-bg);
+            color: var(--text-color);
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            margin-left: 50px;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background-color: var(--secondary-color);
+        }
+
+        nav a#logout-btn {
+            margin-top: 30px;
+            color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+
+        nav a#logout-btn:hover {
+            background-color: rgba(255, 107, 107, 0.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Recommendation Cards */
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .recommendation-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 4px solid var(--accent-color);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .card-content ul {
+            padding-left: 20px;
+        }
+
+        .card-content li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Category Colors */
+        .salud {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .aprendizaje {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .medio-ambiente {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        /* No Recommendations Message */
+        .no-recommendations {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="logo1.png" alt="Logo IKIGAI" class="sidebar-logo">
+                <div class="logo-text">IKIGAI</div>
+            </div>
+            <p class="subtitle">Encuentra tu propósito</p>
+            <nav>
+                <a href="dashboard.html">📅 Inicio</a>
+                <a href="habits.html">✅ Hábitos</a>
+                <a href="recommendations.html" class="active">💡 Recomendaciones</a>
+                <a href="stats.html">📊 Estadísticas</a>
+                <a href="settings.html">⚙️ Ajustes</a>
+                <a href="#" id="logout-btn">🚪 Cerrar sesión</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <h1>Recomendaciones para tu bienestar</h1>
+
+            <div class="recommendations-grid">
+                <!-- Tarjeta 1: Agua -->
+                <div class="recommendation-card">
+                    <img src="images/agua.png" alt="Beneficios del agua" class="card-image">
+                    <div class="card-content">
+                        <h2>Beneficios de tomar agua</h2>
+                        <p>2 litros de agua al día pueden brindarte:</p>
+                        <ul>
+                            <li>Más energía durante el día</li>
+                            <li>Piel, uñas y cabello más saludables</li>
+                            <li>Músculos más flexibles y resistentes</li>
+                            <li>Mejor circulación sanguínea</li>
+                            <li>Menos probabilidad de infecciones</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <span class="category-tag salud">Salud</span>
+                        <small>Recomendación diaria</small>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Lectura -->
+                <div class="recommendation-card">
+                    <img src="images/leer.png" alt="Consejos para leer más" class="card-image">
+                    <div class="card-content">
+                        <h2>Consejos para leer más</h2>
+                        <ul>
+                            <li>Lleva un libro siempre contigo</li>
+                            <li>Establece un horario fijo para leer</li>
+                            <li>Elimina distracciones digitales</li>
+                            <li>Visualiza lo que lees</li>
+                            <li>Cambia de ambiente para leer</li>
+                            <li>Comparte tus lecturas</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <span class="category-tag aprendizaje">Aprendizaje</span>
+                        <small>Hábito intelectual</small>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Salud -->
+                <div class="recommendation-card">
+                    <img src="images/salud.png" alt="Cuidar tu salud" class="card-image">
+                    <div class="card-content">
+                        <h2>Cuidar tu salud</h2>
+                        <p>Prioriza tu bienestar antes de que sea tarde:</p>
+                        <ul>
+                            <li>El ejercicio es clave para cuerpo y mente</li>
+                            <li>Alimentación consciente es vivir mejor</li>
+                            <li>Tu cuerpo es tu templo - cuídalo</li>
+                            <li>Prevención es mejor que curación</li>
+                            <li>Equilibrio entre trabajo y descanso</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <span class="category-tag salud">Salud</span>
+                        <small>Bienestar integral</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar autenticación
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Configurar logout
+            document.getElementById('logout-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+
+            // Podrías agregar aquí lógica para cargar recomendaciones dinámicas
+            // desde tu API si lo deseas en el futuro
+        });
+    </script>
+</body>
+
+</html>

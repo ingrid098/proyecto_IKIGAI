@@ -36,8 +36,16 @@ const habitSchema = new mongoose.Schema({
     },
     completionRate: {
         type: Number,
-        default: 0
-    }
+        default: 0,
+        min: 0,
+        max: 100
+    },
+
+    progress: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Progress'
+    }]
+
 }, {
     timestamps: true
 });

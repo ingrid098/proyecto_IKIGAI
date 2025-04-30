@@ -3,7 +3,8 @@ import {
     createHabit,
     getHabits,
     updateHabit,
-    logProgress
+    logProgress,
+    deleteHabit,
 } from '../controllers/habitController.js';
 import protect from '../middleware/authMiddleware.js';
 
@@ -13,5 +14,6 @@ router.post('/', protect, createHabit);
 router.get('/', protect, getHabits);
 router.put('/:id', protect, updateHabit);
 router.post('/:id/progress', protect, logProgress);
+router.delete('/:id', protect, deleteHabit);
 
 export default router;
